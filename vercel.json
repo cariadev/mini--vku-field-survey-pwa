@@ -1,0 +1,8 @@
+{
+  "buildCommand": "flutter build web --release --pwa-strategy=offline-first",
+  "outputDirectory": "build/web",
+  "installCommand": "git clone https://github.com/flutter/flutter.git -b stable --depth 1 && export PATH=\"$PATH:$PWD/flutter/bin\" && flutter pub get",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

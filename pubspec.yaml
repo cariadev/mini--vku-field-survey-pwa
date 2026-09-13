@@ -1,0 +1,38 @@
+name: vku_field_survey_pwa
+description: "VKU Field Survey PWA - Offline-first campus facility inspection form (Mini-Project 1)"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Offline storage backed by IndexedDB when running on Flutter Web
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Unique ids for each survey record
+  uuid: ^4.4.0
+
+  # Optional photo attachment (works offline via browser file picker)
+  image_picker: ^1.1.2
+
+  # Human friendly date formatting
+  intl: ^0.19.0
+
+  # Connectivity detection to show online/offline status + trigger "sync"
+  connectivity_plus: ^6.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+  
