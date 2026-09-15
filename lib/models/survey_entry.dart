@@ -1,4 +1,3 @@
-/// Condition options for a facility inspection.
 enum FacilityCondition { good, needsRepair, damaged }
 
 extension FacilityConditionLabel on FacilityCondition {
@@ -21,10 +20,9 @@ extension FacilityConditionLabel on FacilityCondition {
   }
 }
 
-/// A single field-survey record. Stored locally in Hive (IndexedDB on web)
-/// so the form keeps working with zero network connectivity.
 class SurveyEntry {
   final String id;
+  final String inspectorName; // Thêm tên người khảo sát
   final String facilityName;
   final String location;
   final FacilityCondition condition;
@@ -32,9 +30,13 @@ class SurveyEntry {
   final String? photoBase64;
   final DateTime createdAt;
   final bool synced;
+  final int cleanlinessRating;
+  final int safetyRating;
+  final int usabilityRating;
 
   const SurveyEntry({
     required this.id,
+    required this.inspectorName,
     required this.facilityName,
     required this.location,
     required this.condition,
@@ -42,11 +44,15 @@ class SurveyEntry {
     required this.createdAt,
     this.photoBase64,
     this.synced = false,
+    this.cleanlinessRating = 5,
+    this.safetyRating = 5,
+    this.usabilityRating = 5,
   });
 
   SurveyEntry copyWith({bool? synced}) {
     return SurveyEntry(
       id: id,
+      inspectorName: inspectorName,
       facilityName: facilityName,
       location: location,
       condition: condition,
@@ -54,14 +60,16 @@ class SurveyEntry {
       createdAt: createdAt,
       photoBase64: photoBase64,
       synced: synced ?? this.synced,
+      cleanlinessRating: cleanlinessRating,
+      safetyRating: safetyRating,
+      usabilityRating: usabilityRating,
     );
   }
 
-  /// Hive (through hive_flutter) stores plain maps here, avoiding the need
-  /// for generated TypeAdapters — keeps the mini-project build simple.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'inspectorName': inspectorName,
       'facilityName': facilityName,
       'location': location,
       'condition': condition.name,
@@ -69,12 +77,16 @@ class SurveyEntry {
       'photoBase64': photoBase64,
       'createdAt': createdAt.toIso8601String(),
       'synced': synced,
+      'cleanlinessRating': cleanlinessRating,
+      'safetyRating': safetyRating,
+      'usabilityRating': usabilityRating,
     };
   }
 
   factory SurveyEntry.fromMap(Map<dynamic, dynamic> map) {
     return SurveyEntry(
       id: map['id'] as String,
+      inspectorName: map['inspectorName'] as String? ?? 'Chưa rõ',
       facilityName: map['facilityName'] as String,
       location: map['location'] as String,
       condition: FacilityConditionLabel.fromName(map['condition'] as String),
@@ -82,6 +94,9 @@ class SurveyEntry {
       photoBase64: map['photoBase64'] as String?,
       createdAt: DateTime.parse(map['createdAt'] as String),
       synced: map['synced'] as bool? ?? false,
+      cleanlinessRating: map['cleanlinessRating'] as int? ?? 5,
+      safetyRating: map['safetyRating'] as int? ?? 5,
+      usabilityRating: map['usabilityRating'] as int? ?? 5,
     );
   }
 }
